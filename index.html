@@ -1,72 +1,179 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Undangan Pernikahan</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Undangan Pernikahan</title>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background: #f8f8f8;
-    }
-    header {
-      padding: 60px 20px;
-      background: #ffffff;
-    }
-    h1 {
-      margin: 0;
-      font-size: 40px;
-    }
-    .section {
-      padding: 40px 20px;
-      background: #ffffff;
-      margin: 20px;
-      border-radius: 12px;
-    }
-    img {
-      max-width: 90%;
-      border-radius: 12px;
-      margin: 10px 0;
-    }
-    video {
-      width: 90%;
-      border-radius: 12px;
-    }
-  </style>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --primary:#d63384;
+  --bg:#fafafa;
+}
+
+body{
+  margin:0;
+  font-family:Poppins,sans-serif;
+  background:var(--bg);
+  color:#333;
+  text-align:center;
+}
+
+/* OPENING */
+#opening{
+  position:fixed;
+  inset:0;
+  background:url("https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=1200") center/cover;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  color:white;
+  z-index:10;
+}
+
+button{
+  padding:12px 20px;
+  border:none;
+  border-radius:8px;
+  background:var(--primary);
+  color:white;
+  font-weight:600;
+  cursor:pointer;
+}
+
+section{padding:60px 20px;max-width:900px;margin:auto}
+.card{background:white;border-radius:12px;padding:20px;margin-top:20px;box-shadow:0 4px 12px rgba(0,0,0,.08)}
+
+.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.gallery img{width:100%;border-radius:10px}
+
+.countdown{font-size:1.5rem;font-weight:600}
+
+input,textarea{
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  border-radius:8px;
+  border:1px solid #ddd;
+}
+
+footer{padding:20px;color:#777}
+.music-btn{position:fixed;bottom:20px;right:20px}
+</style>
 </head>
 
 <body>
 
-  <header>
-    <h1>Alfa & Lenny</h1>
-    <p>Undangan Pernikahan</p>
-  </header>
+<!-- OPENING -->
+<div id="opening">
+  <h1>Undangan Pernikahan</h1>
+  <button onclick="openInvite()">Buka Undangan</button>
+</div>
 
-  <div class="section">
-    <h2>Video Cover</h2>
-    <video controls autoplay muted>
-      <source src="videomarry.mp4" type="video/mp4">
-    </video>
+<audio id="music" loop>
+  <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_c8c8a73467.mp3">
+</audio>
+
+<button class="music-btn" onclick="toggleMusic()">🔊</button>
+
+<!-- COVER -->
+<header style="padding:100px 20px;background:#fff">
+  <h1>Alfa & Lenny</h1>
+  <p>05 oktober 2026</p>
+</header>
+
+<!-- COUNTDOWN -->
+<section>
+  <h2>Menuju Hari Bahagia</h2>
+  <div class="countdown" id="countdown"></div>
+</section>
+
+<!-- DETAIL -->
+<section>
+  <h2>Detail Acara</h2>
+  <div class="card">
+    <p><b>Akad:</b> 09.00 WIB</p>
+    <p><b>Resepsi:</b> 11.00 WIB</p>
+    <p><b>Lokasi:</b> Gedung Serbaguna Bahagia</p>
   </div>
+</section>
 
-  <div class="section">
-    <h2>Galeri</h2>
+<!-- GALERI -->
+<section>
+  <h2>Galeri</h2>
+  <div class="gallery">
     <img src="batak.png">
     <img src="amerika.png">
     <img src="papuma.png">
   </div>
+</section>
 
-  <div class="section">
-    <h2>Lokasi</h2>
-    <p>Detail lokasi acara bisa ditambahkan di sini</p>
+<!-- MAP -->
+<section>
+  <h2>Lokasi</h2>
+  <iframe src="https://maps.app.goo.gl/gFcsA1bctJRQyMLE7"
+  width="100%" height="300" style="border:0;border-radius:12px"></iframe>
+</section>
+
+<!-- RSVP -->
+<section>
+  <h2>RSVP</h2>
+  <div class="card">
+    <form id="rsvpForm">
+      <input type="text" id="name" placeholder="Nama" required>
+      <textarea id="message" placeholder="Ucapan"></textarea>
+      <button type="submit">Kirim</button>
+    </form>
+    <p id="status"></p>
   </div>
+</section>
 
-  <audio autoplay loop>
-    <source src="bcl-ikarenakucintakau.mp3" type="audio/mp3">
-  </audio>
+<footer>© 2026 Undangan Digital</footer>
+
+<script>
+/* OPENING */
+function openInvite(){
+  document.getElementById("opening").style.display="none";
+  document.getElementById("music").play();
+}
+
+/* MUSIC */
+function toggleMusic(){
+  const music=document.getElementById("music");
+  music.paused?music.play():music.pause();
+}
+
+/* COUNTDOWN */
+const target=new Date("Oct 05, 2026 09:00:00").getTime();
+setInterval(()=>{
+  const now=new Date().getTime();
+  const diff=target-now;
+  const d=Math.floor(diff/(1000*60*60*24));
+  const h=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+  const m=Math.floor((diff%(1000*60*60))/(1000*60));
+  const s=Math.floor((diff%(1000*60))/1000);
+  document.getElementById("countdown").innerHTML=
+    `${d} hari ${h} jam ${m} menit ${s} detik`;
+},1000);
+
+/* RSVP → GOOGLE SHEET */
+document.getElementById("rsvpForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const name=document.getElementById("name").value;
+  const message=document.getElementById("message").value;
+
+  await fetch("https://docs.google.com/spreadsheets/d/19AVrdjjoxmhWwxr3d4_40UVAcXnhe7dy/edit?gid=756569476#gid=756569476",{
+    method:"POST",
+    body:JSON.stringify({name,message})
+  });
+
+  document.getElementById("status").innerText="Terima kasih sudah konfirmasi ❤️";
+  e.target.reset();
+});
+</script>
 
 </body>
 </html>
